@@ -1,0 +1,18 @@
+Hello world
+<script type="text/javascript">
+var firstTab = null;
+var secondTab = null;
+
+chrome.browserAction.onClicked.addListener(function(tab) {
+	firstTab = tab;
+	chrome.tabs.create({}, function (tab) {
+		secondTab = tab;
+	});
+});
+chrome.webNavigation.onCommitted.addListener(function(details) {
+	if (firstTab.id === details.tabId && details.frameId === 0) {
+		var url = details.url;
+		chrome.tabs.update(secondTab.id, { url: url }, null);
+	}
+});
+</script>
