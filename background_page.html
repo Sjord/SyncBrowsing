@@ -1,18 +1,43 @@
-Hello world
+<script type="text/javascript" src="jquery-1.7.1.min.js"></script>
 <script type="text/javascript">
-var firstTab = null;
-var secondTab = null;
 
-chrome.browserAction.onClicked.addListener(function(tab) {
-	firstTab = tab;
-	chrome.tabs.create({}, function (tab) {
-		secondTab = tab;
-	});
-});
-chrome.webNavigation.onCommitted.addListener(function(details) {
-	if (firstTab.id === details.tabId && details.frameId === 0) {
-		var url = details.url;
-		chrome.tabs.update(secondTab.id, { url: url }, null);
+function getModifyUrl(firstUrl, secondUrl) {
+	i1 = firstUrl.length - 1;
+	i2 = secondUrl.length - 1;
+	while (i1 >= 0 && i2 >= 0 && firstUrl[i1] === secondUrl[i2]) {
+		i1--;
+		i2--;
 	}
-});
+	var diff1 = firstUrl.substring(0, i1 + 1);
+	var diff2 = secondUrl.substring(0, i2 + 1);
+	return function (url) {
+		return url.replace(diff1, diff2);
+	};
+}
+
+function createSyncTab(firstTab, secondUrl, splitSessions) {
+	chrome.tabs.create({ url: secondUrl }, function (secondTab) {
+		var modifyUrl = getModifyUrl(firstTab.url, secondUrl);
+		var keepTabsInSync = function (tabId, changeInfo, tab) {
+			if (firstTab.id === tabId) {
+				var origUrl = changeInfo.url;
+				if (typeof(origUrl) !== 'undefined') {
+					console.log(origUrl);
+					var newUrl = modifyUrl(origUrl);
+					chrome.tabs.update(secondTab.id, { url : newUrl }, null);
+				}
+			}
+		};
+
+		var stopSyncing = function (tabId) {
+			if (tabId === firstTab.id || tabId === secondTab.id) {
+				chrome.tabs.onUpdated.removeListener(keepTabsInSync);
+				chrome.tabs.onRemoved.removeListener(stopSyncing);
+			}
+		};
+
+		chrome.tabs.onUpdated.addListener(keepTabsInSync);
+		chrome.tabs.onRemoved.addListener(stopSyncing);
+	});
+}
 </script>
