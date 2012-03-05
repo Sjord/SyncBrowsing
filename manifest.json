@@ -1,6 +1,6 @@
 {
   "name": "SyncBrowsing",
-  "version": "0.2",
+  "version": "0.3",
   "description": "Navigate in two tabs at once",
   "browser_action": {
     "default_title": "SyncBrowsing",
