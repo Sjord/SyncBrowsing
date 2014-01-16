@@ -1,44 +1,31 @@
 <html>
-<head>
-<style type="text/css">
-body {
-width: 500px;
-}
-.url {
-width: 350px;
-}
-</style>
-<body>
+    <head>
+        <style type="text/css">
+            body {
+                width: 500px;
+            }
+            .url {
+                width: 350px;
+            }
+        </style>
+    </head>
+    <body>
 
-First tab URL:
-<input type="text" name="firstUrl" class="url" disabled="disabled" />
+        First tab URL:
+        <input type="text" name="firstUrl" class="url" disabled="disabled" />
 
-<br/>
+        <br/>
 
-Second tab URL:
-<input type="text" name="secondUrl" class="url" id="secondUrl" />
+        Second tab URL:
+        <input type="text" name="secondUrl" class="url" id="secondUrl" />
 
-<br/>
+        <br/>
 
-<label for="splitSessions">Separate sessions:</label>
-<input type="checkbox" name="splitSessions" id="splitSessions" />
+        <label for="splitSessions">Separate sessions:</label>
+        <input type="checkbox" name="splitSessions" id="splitSessions" />
 
-<input type="button" value="Create tab" id="confirmButton" />
-</body>
-<script type="text/javascript" src="jquery-1.7.1.min.js"></script>
-<script type="text/javascript">
-var currentTab;
-chrome.tabs.getSelected(null, function (tab) {
-	var url = tab.url;
-	$('.url').val(url);
-	currentTab = tab;
-});
-
-$('#confirmButton').click(function () {
-	var secondUrl = $('#secondUrl').val();
-	var splitSessions = $('#splitSessions').is(':checked'); 
-	var bgpage = chrome.extension.getBackgroundPage();
-	bgpage.createSyncTab(currentTab, secondUrl, splitSessions);
-});
-</script>
+        <input type="button" value="Create tab" id="confirmButton" />
+    </body>
+    <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
 </html>

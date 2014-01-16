@@ -1,5 +1,3 @@
-<script type="text/javascript" src="jquery-1.7.1.min.js"></script>
-<script type="text/javascript">
 
 function getModifyUrl(firstUrl, secondUrl) {
 	i1 = firstUrl.length - 1;
@@ -22,7 +20,6 @@ function createSyncTab(firstTab, secondUrl, splitSessions) {
 			if (firstTab.id === tabId) {
 				var origUrl = changeInfo.url;
 				if (typeof(origUrl) !== 'undefined') {
-					console.log(origUrl);
 					var newUrl = modifyUrl(origUrl);
 					chrome.tabs.update(secondTab.id, { url : newUrl }, null);
 				}
@@ -50,4 +47,3 @@ function createSyncTab(firstTab, secondUrl, splitSessions) {
     	chrome.tabs.create(tabProperties, initializeTab);
     }
 }
-</script>

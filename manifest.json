@@ -1,13 +1,17 @@
 {
+  "manifest_version": 2,
   "name": "SyncBrowsing",
-  "version": "0.3",
+  "version": "0.4",
   "description": "Navigate in two tabs at once",
   "browser_action": {
     "default_title": "SyncBrowsing",
     "default_icon": "icon.png",
-    "popup": "popup.html"
+    "default_popup": "popup.html"
   },
-  "background_page": "background_page.html",
+  "background": {
+      "scripts": ["jquery-1.7.1.min.js", "syncbrowsing.js"],
+      "persistent": false
+  },
   "permissions": [
     "tabs"
   ]
